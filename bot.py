@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import discord
 
-token = "NDAwMzUwMDk1NzcxNjk3MTcy.DTaYcA.a3Egv_HOKRjMcOByiCRdbDVDGnk"
+with open('token.txt') as token_file:
+    for line in token_file:
+        login_token = line
 
 rules = []
 awards = []
@@ -797,7 +799,7 @@ async def on_message(message):
 useBot = True
 if (useBot):
     print("Running Bot")
-    client.run(token)
+    client.run(login_token)
     # https://discordapp.com/api/oauth2/authorize?client_id=400342210345828352&permissions=3072&scope=bot
 else:
     while True:
