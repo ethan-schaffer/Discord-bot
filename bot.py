@@ -7,8 +7,206 @@ with open('token.txt') as token_file:
 
 rules = []
 awards = []
-awards.append(("inspire", """
-This judged award is given to the Team that embodied the ‘challenge’ of the FIRST Tech Challenge program.
+definition_list = []
+definition_list.append(("Alliance", """A grouping of two Teams that work together for a given Match. Alliances are designated as
+either \"Red\" or \"Blue."""))
+definition_list.append(("Alliance Station", """The designated \"Red\" or \"Blue\" Alliance Area adjacent to the Playing Field where the
+Drivers and Coach stand or move within during a Match. Station One is the Alliance Station closest to the
+audience."""))
+definition_list.append(("Area", """The space defined by the vertical projection of the outside edge of a region’s boundary (for example,
+gaffers tape, goal, Playing Field Wall). The boundary element (tape, wall, markings, etc.) is considered to be
+part of the Area for the purposes of determining Inside and Outside."""))
+definition_list.append(("Autonomous Period", """A thirty-second period in which the Robots operate and react only to sensor inputs
+and to commands pre-programmed by the Team onto the onboard Robot control system. Human control of
+the Robot is not permitted during this time."""))
+definition_list.append(("Balanced", """The condition where a Robot is Completely Supported by a single Balancing Stone and no outer
+edge of the Balancing Stone is Supported by the Playing Field Floor, Robot parts, or Game Elements."""))
+definition_list.append(("Balancing Stone", """A 23 inches (58.4 cm) x 23 inches (58.4 cm) surface located approximately 2 inches (5.08 cm) 
+above the Playing Field Floor. The Balancing Stone surface is Supported by a 
+5.75 inches (14.6cm) x 5.75 inches (14.6 cm) x 1.375 inch (3.5 cm) tall pylon."""))
+definition_list.append(("Block / Blocking", """Preventing an opposing Alliance Robot from accessing an Area or Alliance-specific
+Game Element for an extended period by obstructing ALL paths of travel to the object or Area. Active
+defense played by a Robot shadowing an opposing Alliance Robot that effectively eliminates all paths of
+travel between the opposing Alliance Robot and an Area or Alliance-specific Game Element is considered
+Blocking, even though at any frozen point in time there is an open path. See also Trap / Trapping (which
+may be considered the same except it is FROM a Game Element or Area of the Playing Field)."""))
+definition_list.append(("Cipher", """ The Cipher is a pattern of twelve (12) brown and gray Glyphs Scored into a Cryptobox. There are
+six (6) Ciphers (see Appendix E) that if completed by an Alliance will earn that Alliance points and the ability
+to Score a Relic prior to the End Game."""))
+definition_list.append(("Coach", """ A student Team member or adult mentor designated as the Drive Team advisor during the Match
+and identified by wearing a \"Coach\" badge or identifying marker."""))
+definition_list.append(("Column", """ There are three (3) Columns per Cryptobox; Left, Center, and Right. A Column is Scored when
+there are four (4) Scored Glyphs in the Column and there is a Scored Glyph in each of the four (4) Rows
+that make up that Column."""))
+definition_list.append(("Competition Area", """ The Area where all the Playing Fields, Alliance Stations, scoring tables, on-deck
+queuing tables, event officials, and other tournament items relating to Match play are located. The Team Pit
+Area and practice Playing Fields are not part of the Competition Area."""))
+definition_list.append(("Control / Controlling", """An object is considered to be Controlled by a Robot if the object is following the
+movement of the Robot. Objects that are Controlled by a Robot are considered to be part of the Robot. See
+Possess / Possessing to learn about a related term. Examples include, but are not limited to:
+• Carrying:  holding Game Elements Inside or Outside of a Robot."
+• Herding: pushing or impelling Game Elements to a desired location or direction that gains a
+strategic advantage beyond moving the Robot around the field.
+• Holding: Trapping one or more Scoring Elements against a Game Element, Playing Field Wall, or
+Robot in an attempt to shield or guard them.
+• Launching: propelling Game Elements into the air or throwing in a forceful way.
+Examples of interaction with Game Elements that are not Controlled include, but are not limited to:
+• Plowing: Inadvertent contact with Game Elements while in the path of the Robot moving about the
+Playing Field.
+• Deflecting: Inadvertent contact with a launched Game Element as it bounces off a Robot.
+Cryptobox: An Alliance-specific Scoring Area where Robots place Glyphs. Each Cryptobox contains three
+(3) vertical Columns and four (4) horizontal Rows. There are four (4) Alliance-specific Cryptoboxes (2 red, 2
+blue)."""))
+definition_list.append(("Cryptobox Key",
+                    """ A randomly selected Cryptobox Column used as a Scoring achievement during the Autonomous Period."""))
+definition_list.append(("Disable / Disabled", """A Robot that is no longer active for the remainder of the Match due to a Robot failure
+or by the request of a referee. Teams may not Disable a Robot without the permission of a Field Technical
+Advisor or referee. If a referee Disables a Robot during a Match, he/she will ask the Team to drive their
+Robot to a neutral position on the Playing Field, issue a stop command with the Driver Station, and place
+their Driver Station in a hands-off location on a tournament-provided structure or the Alliance Station floor."""))
+definition_list.append(("Disqualified / Disqualification / Disqualify",
+                    """A Team that is Disqualified from a Match has their Robot Disabled and will not receive credit for the Match(i.e., no Qualifying or Ranking points)"""))
+definition_list.append(("Drive Team",
+                    """Up to three representatives (two Drivers and one Coach) from the same Team."""))
+definition_list.append(("Driver", """A pre-college student Team member responsible for operating and controlling the Robot and
+identified by wearing a tournament supplied \"Driver\" badge or identifying marker."""))
+definition_list.append(
+    ("Driver-Controlled Period", """The two-minute time period in which the Drivers operate the Robots."""))
+definition_list.append(("Driver Station", """Hardware and software used by a Drive Team to control their Robot during a Match.The
+Driver Station consists of an Android device, FIRST Tech Challenge supplied Android App, adapter
+cable(s), optional non-powered (i.e., does not draw power from a DC power input port) USB Hub, an
+optional commercial off the shelf USB external battery connected to the USB Hub to charge the Android
+device at any time, and up to two controllers to drive the Robot.The only allowed controller models are the
+Logitech F310 Gamepad and the Xbox 360 Controller for Windows (Part  #: 52A-00004)."""))
+definition_list.append(("End Game", """The last thirty seconds of the Driver-Controlled Period."""))
+definition_list.append(("Game Element", """Any item Robots interact with to play the game.Game Elements for this year’s game include: Glyphs, Relics, Jewels, Balancing Stones, Relic Recovery Zones, Pictographs, and the Cryptoboxes."""))
+definition_list.append(("Glyph", """ An Alliance neutral Scoring Element for the game. The Glyph is a foam cube measuring
+approximately 6 inches ± 0.125 inches (15.2 cm ± 0.3) on a side. Brown Glyphs weigh approximately 4.18
+ounces (118.39 gm) and gray Glyphs weigh approximately 3.83 ounces (108.64 gm). There are twenty-four
+(24) gray Glyphs and twenty-four (24) brown Glyphs."""))
+definition_list.append(("Glyph Scoring", """ A Glyph is considered Scored when any part of the Glyph is between two Cryptobox Rails
+and is not in contact with a Robot of the corresponding Alliance. A 2 inch wide strip of tape is placed on the
+Playing Field Floor across the tips of the Rails to provide a visual aid to help determine if a Glyph is between
+the Rails. See Appendices C and D for further detail."""))
+definition_list.append(("Glyph Pit", """ The location where forty-four (44) Glyphs reside at the start of a Match (there are an additional
+four (4) Glyphs Pre-loaded into the Robots). The Glyphs are randomly placed into the Glyph Pit."""))
+definition_list.append(("In (Inside) / Completely In (Completely Inside)", """An object that has crossed into the upwards vertical (i.e.,
+at a right angle to the Playing Field Floor) extension of a defined Area’s boundary is Inside the Area. An
+object that is entirely within the upwards vertical extension of a defined Area’s boundary is Completely
+Inside the Area. The boundary element (tape, wall, markings, etc.) is part of the Area for the purposes of
+determining Inside and Outside."""))
+definition_list.append(("Inadvertent", """ An outcome that is not a planned strategy and not the predictable result of persistent or
+repeated actions."""))
+definition_list.append(("Inconsequential", """ An outcome that does not influence Scoring or gameplay."""))
+definition_list.append(("Jewel", """ An object that Robots interact with during the Autonomous Period to earn points for their Alliance.
+FIRST® RELIC RECOVERY℠ is played with four (4) Jewel Sets which are located as shown in Figure 1.3-1.
+There are four (4) Jewels per Alliance. The Platform is a 0.48 inches (1.2 cm) thick plate with two holes into
+which the Jewels are placed. The Platforms are not affixed to the Playing Field in any manner. The Jewels
+measure 3.75 inches (9.5 cm) in diameter and weigh approximately 1.98 ounces (56.13 gm)."""))
+definition_list.append(("Jewel Set", """ Jewel Set consists of a platform and two Jewels. Each Jewel Set starts the Match with two
+Jewels, one red, one blue."""))
+definition_list.append(("Match", """ A head-to-head competition between two Alliances. A Match consists of a thirty-second
+Autonomous Period followed by a two-minute Driver-Controlled Period for a total time of two minutes and
+thirty seconds."""))
+definition_list.append(("Off / Completely Off", """ Not physically in contact with or Supported by an object, surface, etc."""))
+definition_list.append(("On / Completely On", """ An object that is physically in contact with and at least partially Supported by an
+object, surface, etc. is considered On. An object that is entirely Supported by another object, surface, etc. is
+Completely On."""))
+definition_list.append(("Out / Outside", """ An object that has NOT crossed into any part of a defined Area is Outside the Area."""))
+definition_list.append(("Park / Parked", """ The condition where a Robot is motionless."""))
+definition_list.append(("Penalty", """ The consequence imposed for a rule or procedure violation that is identified by a referee. When a
+Penalty occurs, points will be awarded to the Alliance that did not incur the Penalty. Penalties are further
+defined into Minor Penalties (ten points) and Major Penalties (forty points). Penalties may also escalate to
+issuing of a Yellow Card or Red Card as a result of a continued occurrence of a rule violation and upon
+discretion of the Referee."""))
+definition_list.append(("Yellow Cards and Red Cards", """In addition to rule violations explicitly listed in section 1.6, Yellow
+Cards and Red Cards are used in the FIRST Tech Challenge to manage Team and Robot behavior
+that does not align with the mission of FIRST.
+    The Head Referee may assign a Yellow Card as a warning, or a Red Card for Disqualification in a
+Match, as a result of egregious Robot or Team member behavior, or repeated (3 or more) violations 
+of a rule at the event. A Yellow Card or Red Card is indicated at the end of a Match by the Head
+Referee standing in front of the Team’s Alliance Station and holding a Yellow Card and/or Red Card
+in the air.
+    Yellow Cards are additive, meaning that a second Yellow Card is automatically converted to a Red
+Card. A Team is issued a Red Card for any subsequent incident in which they receive an additional
+Yellow Card, including earning a second Yellow Card during a single match. To issue the second
+yellow card, the Head Referee will stand in front of the Team’s Alliance Station and hold a Yellow Card
+and Red Card. The Head Referee will signal the second Yellow Card after the match has ended.
+A Team that has received either a Yellow Card or a Red Card carries a Yellow Card into following
+matches, except as noted below. A Red Card results in match Disqualification. Multiple Red Cards
+may lead to Tournament Disqualification. Once a Team receives a Yellow Card or Red Card, the
+Team number is presented with a yellow background on the audience screen at the beginning of all
+following matches. This is a reminder to the Team, referees, and audience the Team carries a
+Yellow Card.
+    Yellow Cards do not carry over from the qualification Matches to the elimination Matches. During the
+elimination Matches, Yellow and Red Cards count against the entire Alliance, not to a specific Team.
+If a Team receives a Yellow Card or Red Card, it results in the entire Alliance receiving the Yellow
+Card or Red Card for that Match. If two different Teams on the same Alliance are issued Yellow
+Cards, the entire Alliance is issued a Red Card. A Red Card results in zero (0) points for that Match,
+and the Alliance loses the Match. If both Alliances receive Red Cards, the Alliance which committed
+the action earning the Red Card first chronologically loses the Match."""))
+definition_list.append(("Pictograph", """ An image containing an encoded message that reveals the location of the Cryptobox Key.
+The Pictograph is attached to the Playing Field Wall adjacent to each Jewel platform. There are three
+different Pictographs, each representing a different Column in the Cryptobox. The Pictograph is randomly
+chosen prior to the start of each Match as described in Appendix G. Pictographs are difficult for humans to
+decode; however, a Robot can easily decrypt the Pictograph using its onboard Android phone camera and
+the Vuforia software built into the FIRST Tech Challenge software development kit."""))
+definition_list.append(("Pin / Pinning", """ Preventing the movement in ALL directions of an opposing Alliance Robot while it is in
+contact with the Playing Field Wall, one or more Game Elements, or another Robot."""))
+definition_list.append(("Playing Field", """The part of the Competition Area that includes the 12 ft. x 12 ft. (3.66 m x 3.66 m) field, the
+Recovery Zone, and all the Game Elements described in the official field documents. From the audience
+viewpoint, the Red Alliance Area is on the right side of the Playing Field."""))
+definition_list.append(("Playing Field Damage", """A physical change to a Game Element or Playing Field that affects game play or
+an action that causes harm to the playability of a Game Element or Playing Field.
+For example: Black tire marks on a Game Element is not considered
+Playing Field Damage. However, digging a hole larger than 1 inch (2.54
+cm) diameter (approximately the size of a US quarter) into the Playing
+Field tiles or Glyphs is considered Damage."""))
+definition_list.append(("Playing Field Floor", """The surface of the tiles that make up the base of the Playing Field."""))
+definition_list.append(("Playing Field Perimeter", """The outside face of the Playing Field Wall."""))
+definition_list.append(("Playing Field Wall", """ An approximate 12 inches (0.3m) tall, 12 ft. (3.66 m) long by 12 ft. (3.66 m) wide wall
+surrounding the Playing Field Floor. The height of the Wall will vary depending on which Playing Field Wall
+is being used at the event. Robots should be built to interact with all legal perimeters."""))
+definition_list.append(("Possess / Possessing", """An object is in Possession by a Robot if, as the Robot moves or changes
+orientation (for example, moves forward, turns, backs up, spins in place), the object remains in
+approximately the same position relative to the Robot. Objects in Possession of a Robot are considered to
+be Controlled, and they are part of the Robot. See also Control/Controlling."""))
+definition_list.append(("Rail", """The portion of the Cryptobox that extends from the back panel of the Cryptobox onto the field where
+Glyphs can be Scored. The color of the Rails indicate which Alliance owns the Cryptobox."""))
+definition_list.append(("Recovery Zone", """There are two (2) Alliance-specific Recovery Zone mats that are located outside the
+Playing Field Perimeter, adjacent to the wall facing the audience. Each Recovery Zone contains three (3)
+distinct Scoring Areas at different distances from the Playing Field Wall where a Robot may place a Relic.
+The Scoring Areas are designated as 1, 2, and 3. Recovery Zone 1 is closest to the Playing Field Wall."""))
+definition_list.append(("Relic", """ An Alliance-specific Scoring Element. The Relics measure 6.0 inches (15.2 cm) side to side, 3.25
+inches (8.25 cm) front to back, and 10 inches (25.4 cm) tall and weigh approximately 4.72 ounces (214 gm)
+each. There are four (4) Relics, two (2) per Alliance. At the start of a Match, one Relic is placed in each
+corner of the Playing Field Wall, the Relic will be in a standing orientation and must touch both adjacent
+walls. The two (2) Blue Relics are adjacent to the wall in front of the Blue Alliance Station and the two (2)
+Red Relics are adjacent to the wall in front of the Red Alliance Station."""))
+definition_list.append(("Robot", """ Any mechanism that has passed inspection and a Drive Team places on the Playing Field prior to
+the start of a Match. A detailed definition of Robot is in the Robot rules section in the Game Manual Part 1."""))
+definition_list.append(("Row", """ There are four (4) Rows per Cryptobox. Each Row is delineated by a strip of 1 inch (2.54 cm) wide,
+white gaffer tape. The bottom edge of each Row is coincident with the bottom edge of a tape strip. A Row is
+Scored when there is a Scored Glyph in each of the three (3) Columns that make up that Row."""))
+definition_list.append(("Safe Zone", """ The Area in front of the Cryptobox that is outlined in red or blue gaffer tape. The triangle is 36
+inches (91.4 cm) wide at the base and the apex extends 24 inches (61.0 cm) from the wall."""))
+definition_list.append(("Scoring / Score", """ Robots earn points for their Alliance by interacting with Scoring Elements and Parking in
+specific Areas of the Playing Field. Scoring Elements are considered to be Scored when they are placed in
+the appropriate location and are no longer in contact with a Robot from the corresponding Alliance. The
+Scoring achievements and their point values are described in section 1.5."""))
+definition_list.append(("Scoring Elements", """ Objects that Robots manipulate to earn points for their Alliance. The Scoring Elements
+for FIRST® RELIC RECOVERY℠ are Glyphs, Relics, and Jewels."""))
+definition_list.append(("Support / Supported / Completely Supported", """A Robot is Supported by an object if that object is bearing
+at least some of the weight of the Robot. If the object is bearing all the Robot’s weight, the Robot is
+Completely Supported by the object."""))
+definition_list.append(("Team", """ Mentors, supporters, and pre-college-aged students affiliated with an entity registered with FIRST
+and for the competition."""))
+definition_list.append(("Trap / Trapping", """ Preventing an opposing Alliance Robot escaping from a constrained Area of the Playing
+Field or from a Game Element for an extended period of time by obstructing ALL paths of travel from the 
+object or Area. See also Block / Blocking (which may be considered the same except it is TO a Game
+Element or Area of the Playing Field)."""))
+
+awards.append(("inspire", """This judged award is given to the Team that embodied the ‘challenge’ of the FIRST Tech Challenge program.
 The Team that receives this award is a strong ambassador for FIRST programs and a role model FIRST Team.
 This Team is a top contender for many other judged awards and is a gracious competitor.
 The Inspire Award winner is an inspiration to other Teams, acting with Gracious Professionalism® both on and off the Playing Field.
@@ -707,6 +905,9 @@ def handle_query(query, rules_list, awards_list):
     elif (words[0].lower() == "rule"):
         print("rule")
         terms = get_rules_list(rules_list, words[1:])
+    elif (words[0].lower() == "define"):
+        print("definition")
+        terms = get_rules_list(definition_list, words[1:])
     else:
         print("nothing")
         return ""
