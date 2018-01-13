@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import discord
+import random
+import time
 
 with open('token.txt') as token_file:
     for line in token_file:
         login_token = line
+useBot = False
 
 rules = []
 awards = []
@@ -58,16 +61,16 @@ Cryptobox: An Alliance-specific Scoring Area where Robots place Glyphs. Each Cry
 (3) vertical Columns and four (4) horizontal Rows. There are four (4) Alliance-specific Cryptoboxes (2 red, 2
 blue)."""))
 definition_list.append(("Cryptobox Key",
-                    """ A randomly selected Cryptobox Column used as a Scoring achievement during the Autonomous Period."""))
+                        """ A randomly selected Cryptobox Column used as a Scoring achievement during the Autonomous Period."""))
 definition_list.append(("Disable / Disabled", """A Robot that is no longer active for the remainder of the Match due to a Robot failure
 or by the request of a referee. Teams may not Disable a Robot without the permission of a Field Technical
 Advisor or referee. If a referee Disables a Robot during a Match, he/she will ask the Team to drive their
 Robot to a neutral position on the Playing Field, issue a stop command with the Driver Station, and place
 their Driver Station in a hands-off location on a tournament-provided structure or the Alliance Station floor."""))
 definition_list.append(("Disqualified / Disqualification / Disqualify",
-                    """A Team that is Disqualified from a Match has their Robot Disabled and will not receive credit for the Match(i.e., no Qualifying or Ranking points)"""))
+                        """A Team that is Disqualified from a Match has their Robot Disabled and will not receive credit for the Match(i.e., no Qualifying or Ranking points)"""))
 definition_list.append(("Drive Team",
-                    """Up to three representatives (two Drivers and one Coach) from the same Team."""))
+                        """Up to three representatives (two Drivers and one Coach) from the same Team."""))
 definition_list.append(("Driver", """A pre-college student Team member responsible for operating and controlling the Robot and
 identified by wearing a tournament supplied \"Driver\" badge or identifying marker."""))
 definition_list.append(
@@ -79,7 +82,8 @@ optional commercial off the shelf USB external battery connected to the USB Hub 
 device at any time, and up to two controllers to drive the Robot.The only allowed controller models are the
 Logitech F310 Gamepad and the Xbox 360 Controller for Windows (Part  #: 52A-00004)."""))
 definition_list.append(("End Game", """The last thirty seconds of the Driver-Controlled Period."""))
-definition_list.append(("Game Element", """Any item Robots interact with to play the game.Game Elements for this year’s game include: Glyphs, Relics, Jewels, Balancing Stones, Relic Recovery Zones, Pictographs, and the Cryptoboxes."""))
+definition_list.append(("Game Element",
+                        """Any item Robots interact with to play the game.Game Elements for this year’s game include: Glyphs, Relics, Jewels, Balancing Stones, Relic Recovery Zones, Pictographs, and the Cryptoboxes."""))
 definition_list.append(("Glyph", """ An Alliance neutral Scoring Element for the game. The Glyph is a foam cube measuring
 approximately 6 inches ± 0.125 inches (15.2 cm ± 0.3) on a side. Brown Glyphs weigh approximately 4.18
 ounces (118.39 gm) and gray Glyphs weigh approximately 3.83 ounces (108.64 gm). There are twenty-four
@@ -108,11 +112,13 @@ Jewels, one red, one blue."""))
 definition_list.append(("Match", """ A head-to-head competition between two Alliances. A Match consists of a thirty-second
 Autonomous Period followed by a two-minute Driver-Controlled Period for a total time of two minutes and
 thirty seconds."""))
-definition_list.append(("Off / Completely Off", """ Not physically in contact with or Supported by an object, surface, etc."""))
+definition_list.append(
+    ("Off / Completely Off", """ Not physically in contact with or Supported by an object, surface, etc."""))
 definition_list.append(("On / Completely On", """ An object that is physically in contact with and at least partially Supported by an
 object, surface, etc. is considered On. An object that is entirely Supported by another object, surface, etc. is
 Completely On."""))
-definition_list.append(("Out / Outside", """ An object that has NOT crossed into any part of a defined Area is Outside the Area."""))
+definition_list.append(
+    ("Out / Outside", """ An object that has NOT crossed into any part of a defined Area is Outside the Area."""))
 definition_list.append(("Park / Parked", """ The condition where a Robot is motionless."""))
 definition_list.append(("Penalty", """ The consequence imposed for a rule or procedure violation that is identified by a referee. When a
 Penalty occurs, points will be awarded to the Alliance that did not incur the Penalty. Penalties are further
@@ -162,7 +168,8 @@ For example: Black tire marks on a Game Element is not considered
 Playing Field Damage. However, digging a hole larger than 1 inch (2.54
 cm) diameter (approximately the size of a US quarter) into the Playing
 Field tiles or Glyphs is considered Damage."""))
-definition_list.append(("Playing Field Floor", """The surface of the tiles that make up the base of the Playing Field."""))
+definition_list.append(
+    ("Playing Field Floor", """The surface of the tiles that make up the base of the Playing Field."""))
 definition_list.append(("Playing Field Perimeter", """The outside face of the Playing Field Wall."""))
 definition_list.append(("Playing Field Wall", """ An approximate 12 inches (0.3m) tall, 12 ft. (3.66 m) long by 12 ft. (3.66 m) wide wall
 surrounding the Playing Field Floor. The height of the Wall will vary depending on which Playing Field Wall
@@ -895,16 +902,16 @@ rules.append(("T27", """
 Open-toed or open-backed shoes are not allowed in the Pit Area or in the Competition Area.
 """))
 
-rules.append(("S1","""safe Robot and Playing Field Damage – If at any time the Robot operation is deemed unsafe or has damaged the Playing Field or another Robot, by the determination of the referees, the offending Robot may be Disabled and the Team may be issued a Yellow Card. Re-inspection of the Robot is required before it may play another Match.
+rules.append(("S1", """safe Robot and Playing Field Damage – If at any time the Robot operation is deemed unsafe or has damaged the Playing Field or another Robot, by the determination of the referees, the offending Robot may be Disabled and the Team may be issued a Yellow Card. Re-inspection of the Robot is required before it may play another Match.
 The intent of this rule is to immediately stop unsafe Robot actions or Playing Field Damage that is likely to persist with continued Robot operation. Robots that can continue safe operation without damaging the Playing Field will receive a warning and may continue to play the Match. Robots will be Disabled for unsafe operation or Playing Field Damage that occurs after the first warning for the tournament."""))
+rules.append(("S2",
+              """Robot Extension Outside the Playing Field Perimeter – If any portion of the Robot contacts anything Outside the Playing Field Perimeter, the Team will be issued a Yellow Card and it may be Disabled immediately for the remainder of the Match, unless allowed by Game-Specific rule(s) listed in Section 1.6.3. See the game definitions in section 1.4 for a complete description of the Playing Field Perimeter. The intent of this rule is not to Penalize an Alliance for Inadvertent, safe Robot extension Outside the Playing Field Perimeter. Intentional Robot extension Outside the Playing Field is not permitted, except as allowed by game-specific rules listed in Section 1.6.3."""))
+rules.append(("S3",
+              """ Safety Gear – All members of the Drive Team are required to wear approved eye protection and shoes with closed-toes and a closed-back. If any member of the Drive Team is not wearing these safety items, the referee will issue a warning and if the situation is not remedied within thirty seconds, the offending member(s) of the Drive Team must leave the Competition Area for the remainder of the Match and may not be replaced by another Team member. Failure to comply with a request to leave the Competition Area violates rule <G27>"""))
 
-rules.append(("S2","""Robot Extension Outside the Playing Field Perimeter – If any portion of the Robot contacts anything Outside the Playing Field Perimeter, the Team will be issued a Yellow Card and it may be Disabled immediately for the remainder of the Match, unless allowed by Game-Specific rule(s) listed in Section 1.6.3. See the game definitions in section 1.4 for a complete description of the Playing Field Perimeter. The intent of this rule is not to Penalize an Alliance for Inadvertent, safe Robot extension Outside the Playing Field Perimeter. Intentional Robot extension Outside the Playing Field is not permitted, except as allowed by game-specific rules listed in Section 1.6.3."""))
-
-rules.append(("S3",""" Safety Gear – All members of the Drive Team are required to wear approved eye protection and shoes with closed-toes and a closed-back. If any member of the Drive Team is not wearing these safety items, the referee will issue a warning and if the situation is not remedied within thirty seconds, the offending member(s) of the Drive Team must leave the Competition Area for the remainder of the Match and may not be replaced by another Team member. Failure to comply with a request to leave the Competition Area violates rule <G27>"""))
-
-rules.append(("G1","""" Drive Team – Each Drive Team shall include up to two Drivers and one Coach. Electronic communications (cell phone, two-way radio, Wi-Fi, Bluetooth, etc.) by Drive Team members after an Alliance has been called from the queue to the Playing Field for its Match are not allowed. The first instance of violating this rule will result in a warning, with any following instances during the tournament resulting in a Minor Penalty. Items that may be mistaken by a casual observer as being in violation should not be brought to the Playing Field. The Driver Station is exempt from this rule, but must be used only for operating the Robot."""))
-
-rules.append(("G2",""" Pre-Match Robot Setup – At the beginning of a Match, each Alliance Robot must be set up on the Playing Field in accordance with section 1.5.1. After Robots have been set up on the Playing Field, Drive Teams are required to stand Completely Inside the Alliance Station at the location (Station one or Station two) specified by the Qualification Match schedule.
+rules.append(("G1",
+              """" Drive Team – Each Drive Team shall include up to two Drivers and one Coach. Electronic communications (cell phone, two-way radio, Wi-Fi, Bluetooth, etc.) by Drive Team members after an Alliance has been called from the queue to the Playing Field for its Match are not allowed. The first instance of violating this rule will result in a warning, with any following instances during the tournament resulting in a Minor Penalty. Items that may be mistaken by a casual observer as being in violation should not be brought to the Playing Field. The Driver Station is exempt from this rule, but must be used only for operating the Robot."""))
+rules.append(("G2", """ Pre-Match Robot Setup – At the beginning of a Match, each Alliance Robot must be set up on the Playing Field in accordance with section 1.5.1. After Robots have been set up on the Playing Field, Drive Teams are required to stand Completely Inside the Alliance Station at the location (Station one or Station two) specified by the Qualification Match schedule.
 	a. During the Qualification Matches, the Blue Alliance Robots are set up on the Playing Field first, unless the Red Alliance waives their right to set up on the Playing Field second.
 	b. During the Elimination Matches, the 3rd and 4th seeded Alliance Robots are set up on the Playing Field first, unless the higher seeded Alliance waives their right to set up on the Playing Field second. Alliance color doesn’t change the seeding of a Team during the Elimination Matches. If the 4th seed defeats the 1st seed in the Semi-Finals, they will still have to place their Robot on the field first in the Finals because their seeding will be lower than the 2nd or 3rd seed.
 	c. Teams may implicitly waive their right to place their Robots on the Playing Field last by placing their Robots on the Playing Field before or in conjunction with the opposing Alliance. There is no need to notify the referees; Teams waive their right by the act of placing their Robots on the Playing Field.
@@ -912,111 +919,105 @@ rules.append(("G2",""" Pre-Match Robot Setup – At the beginning of a Match, ea
 Drive Teams are expected to stage their Robots for a Match, and remove them from the Playing Field afterwards, safely and swiftly. Drive Team efforts that either intentionally or unintentionally delay the start of a Match or the Field reset are not allowed. Examples include, but are not limited to:
 - Late arrival to the Playing Field.
 - Robot maintenance once on the Playing Field."""))
-
-rules.append(("G3",""" Robot Starting Volume – Before the start of a Match, each Robot in its starting location must not exceed a volume of 18 inches (45.7cm) wide by 18 inches (45.7cm) long by 18 inches (45.7cm) tall. The Alliance identification flag and pre-loaded Scoring Elements may extend Outside the 18-inch (45.7cm) cube volume constraint. An offending Robot will be Disabled and powered off for the Match at the Head Referee’s discretion and must remain on the Playing Field in its starting location for the length of the Match. After the start of a Match, the Robot may extend in any dimension unless restricted by the Game-Specific rules detailed in Section 1.6.3."""))
-
-rules.append(("G4",""" Robot Setup Alignment Devices – Alignment devices are allowed during pre-Match setup if they are constructed from legal components, are part of the Robot, and remain Completely Inside the 18-inch (45.7cm) cube starting volume constraint during the set up process. A Minor Penalty will be assessed to the
+rules.append(("G3",
+              """ Robot Starting Volume – Before the start of a Match, each Robot in its starting location must not exceed a volume of 18 inches (45.7cm) wide by 18 inches (45.7cm) long by 18 inches (45.7cm) tall. The Alliance identification flag and pre-loaded Scoring Elements may extend Outside the 18-inch (45.7cm) cube volume constraint. An offending Robot will be Disabled and powered off for the Match at the Head Referee’s discretion and must remain on the Playing Field in its starting location for the length of the Match. After the start of a Match, the Robot may extend in any dimension unless restricted by the Game-Specific rules detailed in Section 1.6.3."""))
+rules.append(("G4", """ Robot Setup Alignment Devices – Alignment devices are allowed during pre-Match setup if they are constructed from legal components, are part of the Robot, and remain Completely Inside the 18-inch (45.7cm) cube starting volume constraint during the set up process. A Minor Penalty will be assessed to the
 Team for violation of this rule. The intent of this rule is to prohibit the use of devices external to the Robot and to prevent the extension of any object or tool Outside the 18-inch (45.7cm) cube starting volume. Humans standing on the other side of the field to aid in aligning the Robot are not allowed."""))
-
-rules.append(("G5",""" Alliance Station – During a Match, the Drivers and Coach must remain Completely Inside their Alliance Station. The first instance of leaving the Alliance Station will result in a warning, with any following instances resulting in a Minor Penalty. Leaving the Alliance Station for safety reasons will not result in a warning or Penalty."""))
-
-rules.append(("G6",""" Starting Game Play Early – Robots that start play of the game (Autonomous or Driver-Controlled Period) prior to competition personnel announcing the start of a Match Period receive a Minor Penalty. Referees have the option of issuing a Major Penalty in place of the Minor Penalty if the early start results in a competitive advantage for the offending Alliance."""))
-
-rules.append(("G7",""" Late Start of the Autonomous Period – Teams participating in the Autonomous Period are expected to press the ”start with 30-second” button on their Driver Station Android device and then place the Driver Station in a hands-off location without delay when field personnel signal the start of the Autonomous Period. A Minor Penalty is assessed for violating this rule. Referees have the option of issuing a Major Penalty in place of the Minor Penalty if the late start results in a competitive advantage for the offending Alliance."""))
-
-rules.append(("G8",""" Stopping Autonomous Period Game Play Early – Drive Teams that use their Driver Station to stop their Robot before the end of the Autonomous Period will receive a Major Penalty. In the case of unsafe Robot behavior, the Drive Team will not be Penalized for stopping the Robot if it is performed with the approval of a referee or Field Technical Advisor."""))
-
-rules.append(("G9",""" Stopping Game Play Late – Robots that do not stop playing the game at the end of the Autonomous or Driver-Controlled Periods when competition personnel or timer software announce the end of a Match period receive a Minor Penalty and the actions of the Robot occurring after the end of a Match period do not count towards their Alliance’s Score. Referees have the option of issuing a Major Penalty in place of the Minor Penalty if the late stop results in a competitive advantage (other than Scoring) for the offending Alliance. Scoring Elements that were launched before the end of the period are eligible to be counted as Scored. Other Robot Scoring achievements that occur after the announced end of the Autonomous Period and before the start of the Driver-Controlled Period do not count towards the Score for the Autonomous or Driver-Controlled Periods. Referees may remove any Scoring Elements from a Scoring Area that are improperly Scored in this manner. The intent of this rule is for Robots to stop playing the game within a reasonable human reaction time following the start of the game sound (i.e., buzzer) signaling the end of the period. Drive Teams should make their best effort to stop game play immediately when the end of period game sound begins. Before the consequences come into play, referees will use their discretion to give Drive Teams an approximate one second grace period following the conclusion of the game sound signaling the end of the period for Robots to stop playing the game."""))
-
-rules.append(("G10",""" Drive Team Contact with the Playing Field or Robot – During a Match, the Drivers and Coaches are prohibited from making contact with the Playing Field, any Game Element, or any Robot. The first instance of contact will result in a warning, with any following instances resulting in a Minor Penalty. Contact that affects Scoring and/or game play will result in issuance of a Yellow Card at the discretion of the referees. Contact with the Playing Field, a Game Element, or a Robot for safety reasons will not result in a
+rules.append(("G5",
+              """ Alliance Station – During a Match, the Drivers and Coach must remain Completely Inside their Alliance Station. The first instance of leaving the Alliance Station will result in a warning, with any following instances resulting in a Minor Penalty. Leaving the Alliance Station for safety reasons will not result in a warning or Penalty."""))
+rules.append(("G6",
+              """ Starting Game Play Early – Robots that start play of the game (Autonomous or Driver-Controlled Period) prior to competition personnel announcing the start of a Match Period receive a Minor Penalty. Referees have the option of issuing a Major Penalty in place of the Minor Penalty if the early start results in a competitive advantage for the offending Alliance."""))
+rules.append(("G7",
+              """ Late Start of the Autonomous Period – Teams participating in the Autonomous Period are expected to press the ”start with 30-second” button on their Driver Station Android device and then place the Driver Station in a hands-off location without delay when field personnel signal the start of the Autonomous Period. A Minor Penalty is assessed for violating this rule. Referees have the option of issuing a Major Penalty in place of the Minor Penalty if the late start results in a competitive advantage for the offending Alliance."""))
+rules.append(("G8",
+              """ Stopping Autonomous Period Game Play Early – Drive Teams that use their Driver Station to stop their Robot before the end of the Autonomous Period will receive a Major Penalty. In the case of unsafe Robot behavior, the Drive Team will not be Penalized for stopping the Robot if it is performed with the approval of a referee or Field Technical Advisor."""))
+rules.append(("G9",
+              """ Stopping Game Play Late – Robots that do not stop playing the game at the end of the Autonomous or Driver-Controlled Periods when competition personnel or timer software announce the end of a Match period receive a Minor Penalty and the actions of the Robot occurring after the end of a Match period do not count towards their Alliance’s Score. Referees have the option of issuing a Major Penalty in place of the Minor Penalty if the late stop results in a competitive advantage (other than Scoring) for the offending Alliance. Scoring Elements that were launched before the end of the period are eligible to be counted as Scored. Other Robot Scoring achievements that occur after the announced end of the Autonomous Period and before the start of the Driver-Controlled Period do not count towards the Score for the Autonomous or Driver-Controlled Periods. Referees may remove any Scoring Elements from a Scoring Area that are improperly Scored in this manner. The intent of this rule is for Robots to stop playing the game within a reasonable human reaction time following the start of the game sound (i.e., buzzer) signaling the end of the period. Drive Teams should make their best effort to stop game play immediately when the end of period game sound begins. Before the consequences come into play, referees will use their discretion to give Drive Teams an approximate one second grace period following the conclusion of the game sound signaling the end of the period for Robots to stop playing the game."""))
+rules.append(("G10", """ Drive Team Contact with the Playing Field or Robot – During a Match, the Drivers and Coaches are prohibited from making contact with the Playing Field, any Game Element, or any Robot. The first instance of contact will result in a warning, with any following instances resulting in a Minor Penalty. Contact that affects Scoring and/or game play will result in issuance of a Yellow Card at the discretion of the referees. Contact with the Playing Field, a Game Element, or a Robot for safety reasons will not result in a
 warning or Penalty. For example, a Game Element is launched from a Robot on the Playing Field and it Inadvertently hits a Team member in the Alliance Station and is deflected back onto the field. The Team would NOT receive a Penalty because the Team member was protecting him/herself (safety). However, if that same Game Element is caught and/or directed to a specific location on the Playing Field, the Team may be issued a Penalty."""))
-
-rules.append(("G11",""" Autonomous to Driver-Controlled Period Transition – At the conclusion of the Autonomous Period, Robots will remain in a hands-off state. Field personnel will not enter the field, and will not touch Robots on the field from the Autonomous to Driver Controlled transition."""))
-
-rules.append(("G12",""" Drive Team Coach Driver Station Control – During the Driver-Controlled Period, Robots must be remotely operated only by the Drivers using the Gamepads connected to the Team’s Driver Station and/or by software running in the on-board Robot control system. The first instance of Coach controlling a Robot (for example, operating a Gamepad) will result in a warning, with any following instances resulting in a Major Penalty. During the Driver-Controlled Period, Drive Team Coaches and/or Drivers are allowed to hold the
+rules.append(("G11",
+              """ Autonomous to Driver-Controlled Period Transition – At the conclusion of the Autonomous Period, Robots will remain in a hands-off state. Field personnel will not enter the field, and will not touch Robots on the field from the Autonomous to Driver Controlled transition."""))
+rules.append(("G12", """ Drive Team Coach Driver Station Control – During the Driver-Controlled Period, Robots must be remotely operated only by the Drivers using the Gamepads connected to the Team’s Driver Station and/or by software running in the on-board Robot control system. The first instance of Coach controlling a Robot (for example, operating a Gamepad) will result in a warning, with any following instances resulting in a Major Penalty. During the Driver-Controlled Period, Drive Team Coaches and/or Drivers are allowed to hold the
 Important Note: Rule <G11> is a major change for the 2017-2018 season. Volunteers, Coaches and Teams must be prepared for this new transition during the competition season. Team’s Driver Station Android device and interact with it to select an Op Mode, view information displayed on the screen, and initialize, start, stop, and reset the Robot."""))
-
-rules.append(("G13",""" Recording the Score After Objects Come to Rest – Referee scoresheets will be filled out at the end of the Autonomous and Driver-Controlled Periods when all objects on the Playing Field have come to rest. A change in the state of a Game Element or Robot that occurs before a referee records the Score will affect the Match Score. A change in state of a Game Element or Robot after its Score is recorded on the scoresheet will not change an already-recorded Score."""))
-
-rules.append(("G14",""" Robots Deliberately Detaching Parts – Robots may not deliberately detach parts during a Match, or leave mechanisms on the Playing Field. The consequence of deliberately detaching a part is a Minor Penalty if it does not Block an opposing Alliance Robot, Alliance-specific Scoring Element or Scoring Area. If a deliberately-detached component or mechanism affects gameplay by any Robot, the offending Robot will receive a Major Penalty and will be issued a Yellow Card. Robot parts that are released but remain connected by a tether are considered detached for the purposes of this rule. Tethered components that move independent of the main Robot are considered a detached component and are illegal."""))
-
-rules.append(("G15",""" Robots Grasping Game Elements – Robots may not grab, grasp and/or attach to any Game
+rules.append(("G13",
+              """ Recording the Score After Objects Come to Rest – Referee scoresheets will be filled out at the end of the Autonomous and Driver-Controlled Periods when all objects on the Playing Field have come to rest. A change in the state of a Game Element or Robot that occurs before a referee records the Score will affect the Match Score. A change in state of a Game Element or Robot after its Score is recorded on the scoresheet will not change an already-recorded Score."""))
+rules.append(("G14",
+              """ Robots Deliberately Detaching Parts – Robots may not deliberately detach parts during a Match, or leave mechanisms on the Playing Field. The consequence of deliberately detaching a part is a Minor Penalty if it does not Block an opposing Alliance Robot, Alliance-specific Scoring Element or Scoring Area. If a deliberately-detached component or mechanism affects gameplay by any Robot, the offending Robot will receive a Major Penalty and will be issued a Yellow Card. Robot parts that are released but remain connected by a tether are considered detached for the purposes of this rule. Tethered components that move independent of the main Robot are considered a detached component and are illegal."""))
+rules.append(("G15", """ Robots Grasping Game Elements – Robots may not grab, grasp and/or attach to any Game
 Element or structure other than Scoring Elements, unless specifically allowed by game-specific rule(s) listed
 in Section 1.6.3. The first instance will result in a warning with any following violations resulting in a Major
 Penalty."""))
-
-rules.append(("G16",""" Destruction, Damage, Tipping, etc. – Strategies and/or mechanisms aimed solely at the
+rules.append(("G16", """ Destruction, Damage, Tipping, etc. – Strategies and/or mechanisms aimed solely at the
 destruction, damage, tipping over, or entanglement of Robots or Game Elements are not in the spirit of the
 FIRST Tech Challenge and are not allowed. However, FIRST Tech Challenge games are highly interactive
 and Robot-to-Robot contact and defensive game play should be expected. Some tipping, entanglement, and
 damage may occur as a part of normal game play. If the tipping, entanglement, or damage is ruled to be
 deliberate or chronic, the offending Team will receive a Major Penalty and a Yellow Card."""))
-
-rules.append(("G17",""" Pinning, Trapping, or Blocking Robots – A Robot cannot cause an opposing Alliance Robot to become Pinned, Trapped, or Blocked for more than five seconds. If a referee determines this rule is violated, the offending Alliance will receive a Minor Penalty for every five seconds that they are in violation. If a referee declares a Pinning, Trapping, or Blocking warning during the Match, the offending Robot must immediately move away at least 3 feet (0.9 m), approximately 1.5 floor tiles, from the Pinned, Trapped, or Blocked Robot. The intent of this Rule is that Drive Teams begin to immediately move their Robots away and have a five second grace period to move the required distance, and NOT that they are permitted to intentionally Block for up to five seconds. A Robot cannot incur this type of Penalty during the Autonomous Period unless it is determined by the Referee to be part of a deliberate strategy and will be penalized as described above. If the violation happens during the Autonomous Period, the first action done by the offending Robot during the Driver Controlled Period must be to move away from the Pinned, Trapped, or Blocked Robot or a Minor Penalty will be assessed immediately and again for every five seconds that they are in violation. Game-specific rule(s) listed in Section 1.6.3 that further define Pinning, Trapping, or Blocking take precedence over this general game rule."""))
-
-rules.append(("G18",""" Forcing an Opponent to Break a Rule – The actions of an Alliance or their Robots shall not cause an opposing Alliance or Robot to break a rule and thus incur Penalties. Any forced rule violations committed by the affected Alliance shall be excused, and no Penalties will be assigned."""))
-
-rules.append(("G19",""" Removing Game Elements from the Playing Field – Robots may not deliberately remove Game Elements from the Playing Field during a Match. Game Elements that Inadvertently fall Outside the Playing Field will be returned to the Playing Field by field personnel at the earliest safe and convenient opportunity at a non-Scoring location approximately where it left the field. Game Elements removed from the Playing Field in an attempt to Score are also not subject to this Penalty. Teams deliberately removing Game Elements from the Playing Field will incur a Minor Penalty per Game Element removed from the Playing Field. Game-specific rule(s) listed in Section 1.6.3 that allow the removal of specified Scoring Elements from the Playing Field take precedence over this general game rule."""))
-
-rules.append(("G20",""" Scoring Elements in Contact with Robots – Scoring Elements in a Scoring Area that are in contact with a Robot on the corresponding Alliance for the Scoring Area have zero Score value when referees record the Score at the end of the Autonomous and Driver-Controlled Periods. Game-specific rule(s) listed in Section 1.6.3 that allow Robot contact with Scoring Elements take precedence over this general game rule."""))
-
-rules.append(("G21",""" Post-Match Removal of Game Elements from Robots – Robots must be designed to permit easy removal of Game Elements from any grasping, containing, or holding mechanism after the Match. Robots should also be able to be removed from the Playing Field without damaging the Playing Field. A Minor Penalty will be assessed for violations of this rule. The intent of this rule is to have timely removal of Robots from the Playing Field following a Match. Drive Teams are expected to stage their Robots for a Match, and remove them from the Playing Field afterwards, safely and swiftly. Drive Team efforts that either intentionally or unintentionally delay the start of a Match or the Field reset are not allowed. Examples include, but are not limited to:
+rules.append(("G17",
+              """ Pinning, Trapping, or Blocking Robots – A Robot cannot cause an opposing Alliance Robot to become Pinned, Trapped, or Blocked for more than five seconds. If a referee determines this rule is violated, the offending Alliance will receive a Minor Penalty for every five seconds that they are in violation. If a referee declares a Pinning, Trapping, or Blocking warning during the Match, the offending Robot must immediately move away at least 3 feet (0.9 m), approximately 1.5 floor tiles, from the Pinned, Trapped, or Blocked Robot. The intent of this Rule is that Drive Teams begin to immediately move their Robots away and have a five second grace period to move the required distance, and NOT that they are permitted to intentionally Block for up to five seconds. A Robot cannot incur this type of Penalty during the Autonomous Period unless it is determined by the Referee to be part of a deliberate strategy and will be penalized as described above. If the violation happens during the Autonomous Period, the first action done by the offending Robot during the Driver Controlled Period must be to move away from the Pinned, Trapped, or Blocked Robot or a Minor Penalty will be assessed immediately and again for every five seconds that they are in violation. Game-specific rule(s) listed in Section 1.6.3 that further define Pinning, Trapping, or Blocking take precedence over this general game rule."""))
+rules.append(("G18",
+              """ Forcing an Opponent to Break a Rule – The actions of an Alliance or their Robots shall not cause an opposing Alliance or Robot to break a rule and thus incur Penalties. Any forced rule violations committed by the affected Alliance shall be excused, and no Penalties will be assigned."""))
+rules.append(("G19",
+              """ Removing Game Elements from the Playing Field – Robots may not deliberately remove Game Elements from the Playing Field during a Match. Game Elements that Inadvertently fall Outside the Playing Field will be returned to the Playing Field by field personnel at the earliest safe and convenient opportunity at a non-Scoring location approximately where it left the field. Game Elements removed from the Playing Field in an attempt to Score are also not subject to this Penalty. Teams deliberately removing Game Elements from the Playing Field will incur a Minor Penalty per Game Element removed from the Playing Field. Game-specific rule(s) listed in Section 1.6.3 that allow the removal of specified Scoring Elements from the Playing Field take precedence over this general game rule."""))
+rules.append(("G20",
+              """ Scoring Elements in Contact with Robots – Scoring Elements in a Scoring Area that are in contact with a Robot on the corresponding Alliance for the Scoring Area have zero Score value when referees record the Score at the end of the Autonomous and Driver-Controlled Periods. Game-specific rule(s) listed in Section 1.6.3 that allow Robot contact with Scoring Elements take precedence over this general game rule."""))
+rules.append(("G21", """ Post-Match Removal of Game Elements from Robots – Robots must be designed to permit easy removal of Game Elements from any grasping, containing, or holding mechanism after the Match. Robots should also be able to be removed from the Playing Field without damaging the Playing Field. A Minor Penalty will be assessed for violations of this rule. The intent of this rule is to have timely removal of Robots from the Playing Field following a Match. Drive Teams are expected to stage their Robots for a Match, and remove them from the Playing Field afterwards, safely and swiftly. Drive Team efforts that either intentionally or unintentionally delay the start of a Match or the Field reset are not allowed. Examples include, but are not limited to:
 • Failing to exit the Playing Field once instructed by a Referee.
 • Failing to remove Driver Stations in a timely manner."""))
+rules.append(("G22",
+              """ Robot Manipulation of Scoring Elements – Scoring Elements that are Controlled or Possessed by a Robot are considered to be part of the Robot."""))
+rules.append(("G23",
+              """ Robot or Scoring Elements In Two or More Scoring Areas – Robots or Scoring Elements that are In two or more Scoring Areas earn points only for the highest value achievement. If the achievement values are equal, only one achievement counts as Scored. Exceptions to this general rule may be specified in the Game Play section (1.5) or in the game-specific rules."""))
+rules.append(("G24",
+              """ Disabled Robot Eligibility - If a referee Disables a Robot, it will not be eligible to Score or earn points for the remainder of the Match. A Disabled Robot (whether referee induced or failure) does not earn penalties after becoming Disabled."""))
+rules.append(("G25",
+              """ Playing Field Tolerances – Playing Field and Game Elements will start each Match with tolerances that may vary by as much as +/-1.0 inch (2.5 cm). Teams must design their Robots accordingly."""))
+rules.append(("G26",
+              """ Match Replay – Matches are replayed at the discretion of the Head Referee only for a failure of a Game Element or verified Wi-Fi interference that was likely to have impacted which Alliance won the Match. Unexpected Robot behavior in itself will not result in a Match replay. Team-induced failures, such as low battery conditions, processor sleep time-outs, Robot mechanical/electrical/software/communication failures, etc. are NOT valid justifications for a replaying of a Match."""))
+rules.append(("G27",
+              """ Egregious Behavior – Egregious Robot or Team member behavior at the Playing Field, as determined by the referees, will result in a Major Penalty and issuance of a Yellow Card and/or Red Card. Subsequent violations will result in Team Disqualification from the tournament. Egregious behavior includes, but is not limited to, repeated and/or flagrant violation of game rules, unsafe behavior or actions, and uncivil behavior towards Drivers, Coaches, competition personnel, or event attendees."""))
+rules.append(("G28",
+              """ Inadvertent and Inconsequential - Robot actions that violate a rule may be ruled at the referee’s discretion to be Inconsequential and Inadvertent and will not be Penalized."""))
 
-rules.append(("G22",""" Robot Manipulation of Scoring Elements – Scoring Elements that are Controlled or Possessed by a Robot are considered to be part of the Robot."""))
-
-rules.append(("G23",""" Robot or Scoring Elements In Two or More Scoring Areas – Robots or Scoring Elements that are In two or more Scoring Areas earn points only for the highest value achievement. If the achievement values are equal, only one achievement counts as Scored. Exceptions to this general rule may be specified in the Game Play section (1.5) or in the game-specific rules."""))
-
-rules.append(("G24",""" Disabled Robot Eligibility - If a referee Disables a Robot, it will not be eligible to Score or earn points for the remainder of the Match. A Disabled Robot (whether referee induced or failure) does not earn penalties after becoming Disabled."""))
-
-rules.append(("G25",""" Playing Field Tolerances – Playing Field and Game Elements will start each Match with tolerances that may vary by as much as +/-1.0 inch (2.5 cm). Teams must design their Robots accordingly."""))
-
-rules.append(("G26",""" Match Replay – Matches are replayed at the discretion of the Head Referee only for a failure of a Game Element or verified Wi-Fi interference that was likely to have impacted which Alliance won the Match. Unexpected Robot behavior in itself will not result in a Match replay. Team-induced failures, such as low battery conditions, processor sleep time-outs, Robot mechanical/electrical/software/communication failures, etc. are NOT valid justifications for a replaying of a Match."""))
-
-rules.append(("G27",""" Egregious Behavior – Egregious Robot or Team member behavior at the Playing Field, as determined by the referees, will result in a Major Penalty and issuance of a Yellow Card and/or Red Card. Subsequent violations will result in Team Disqualification from the tournament. Egregious behavior includes, but is not limited to, repeated and/or flagrant violation of game rules, unsafe behavior or actions, and uncivil behavior towards Drivers, Coaches, competition personnel, or event attendees."""))
-
-rules.append(("G28",""" Inadvertent and Inconsequential - Robot actions that violate a rule may be ruled at the referee’s discretion to be Inconsequential and Inadvertent and will not be Penalized."""))
-
-rules.append(("GS1",""" Drive Teams Touching Robots or Driver Stations after Jewel/Pictograph Randomization – Drive Teams are not allowed to touch or interact with their Robots or Driver Stations once field personnel have begun the randomization process. If this occurs, a Minor Penalty will be assessed per Robot and the affected Robots are not eligible to Score a Jewel/Cryptobox Key in the Autonomous Period. This Penalty only affects the offending Team. The non-offending Alliance Partner Robot remains eligible for the Jewel/Cryptobox Key Scoring achievement."""))
-
-rules.append(("GS2",""" Autonomous Period Robot Keep Out Area – Robots may not go Inside the opposing Alliance’s Area of the Playing Field at any time during the Autonomous Period. A Major Penalty will be assessed for violating this rule and any Scoring that occurs in the opposing Alliance’s Area by the offending Robot will not benefit the offending Alliance. The red and blue gaffer tape on the Playing Field Floor divides the Playing Field into equal sized Alliance Areas. Robots may enter the Glyph Pit at any time. The intent of this rule is to allow Robots to Score their Jewels and Glyphs without defensive play by the opposing Alliance. Inadvertent and Inconsequential incursions will be treated per <G28>"""))
-
-rules.append(("GS3","""" Control/Possession Limits of Glyphs – Once a Match begins, a Robot may Control or Possess a maximum of two (2) Glyphs. Plowing through any quantity of Glyphs is allowed but herding or directing multiple Glyphs to gain a strategic advantage (i.e., Scoring, accessibility, defense) is not allowed. The Penalty for Controlling or Possessing more than two (2) Glyphs is an immediate Minor Penalty for each Glyph above the limit plus an additional Minor Penalty per Glyph for each 5-second interval that this situation continues. A double Major Penalty will be assessed for each Glyph Scored while a Robot Controls or Possesses more than two (2) Glyphs. Continued violation of this rule will escalate to Yellow Cards quickly."""))
-
-rules.append(("GS4",""" Glyph Hoarding – Once an alliance has successfully scored more than 20 Glyphs, the members of the Alliance may not collectively possess/control/block access to more than the number of Glyphs required for the Alliance to completely fill their Cryptoboxes. Violation of this rule will result in an immediate Major Penalty and an additional Minor Penalty assessed for each 5 seconds the rule violation persists per Glyph in excess of the limit. Intentional or repeated violations of this rule will escalate quickly to issuance of Yellow Cards to all members of the Alliance."""))
-
-rules.append(("GS5",""" Control/Possession Limits of Relics – Once a Match begins, a Robot may Control or Possess a maximum of one Relic at a time. The Penalty for Controlling or Possessing more than one Relic is that no Relics will be eligible to be Scored at the end of the Match by either Robot for the Alliance."""))
-
-rules.append(("GS6",""" De-scoring Glyphs – Robots may not remove or re-position Glyphs from their opposing Alliance’s Cryptoboxes. A Double Major Penalty will be assessed for every Glyph illegally removed or re-positioned. Robots are allowed to remove or re-position Glyphs from their own Alliance’s Cryptoboxes. Drive Teams should exercise care when operating around an opposing Alliance’s Cryptobox to mitigate De-scoring."""))
-
-rules.append(("GS7",""" De-scoring Relics – Robots may not remove or re-position Relics In the opposing Alliance’s Recovery Zone. In the event of any re-positioning (for example, if a Blue Relic is dropped into the Blue Recovery Zone, bounces to the Red Recovery Zone and knocks the Red Relic from one Scoring position to another) the opposing Alliance’s Relic is awarded the maximum potential points (40 + 15 = 55). De-scoring an opposing Alliance’s Relic will be penalized, even if it is accidental. This rule supersedes rule <G28>"""))
-
-rules.append(("GS8","""" Interfering with Access to Cryptobox – Robots may not interfere with an opposing Alliance Robot that is In their Alliance’s Safe Zone and attempting to Score a Glyph. A Robot must have a Glyph in its Control to be considered as attempting to Score. The first instance will result in an immediate Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly."""))
-
-rules.append(("GS9",""" Non-Glyph Game Elements Inside Cryptobox – Glyphs are the only item allowed to be placed In a Cryptobox. A Major Penalty will immediately be assessed for each non-Glyph item (Jewel, Relic, etc.) placed In an opposing Alliance’s Cryptobox. Removal of the illegal Game Element is up to the Alliance that owns the Cryptobox."""))
-
-rules.append(("GS10",""" Controlling or Blocking access to Relics - Robots may not Control, Trap, or Block access to an opposing Alliance’s Relic. The first instance will result in an immediate Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. If the referee declares a Controlling, Trapping, or Blocking access Penalty, the offending Robot must move away at least 3 ft. (0.9 m), approximately 1.5 floor tiles from the opponent’s Relic. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly. The intent of this rule is to allow Robot access to their Relics. Blocking means denying ALL access, so general Robot movement with respect to other Robots should not be considered in violation unless there is no other way to traverse the Playing Field to get the Relic. Also, note that this rule requires attempted action on the part of the opposing Alliance."""))
-
-rules.append(("GS11",""" Blocking access to Balancing Stone– During the End Game, Robots may not Block access to the opposing Alliance’s Balancing Stones. The first instance will result in a warning with any following violations resulting in a Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. If the referee declares a Blocking access warning during the End Game, the offending Robot must move away at least 3 feet (0.9 m), approximately 1.5 floor tiles from the Blocked Balancing Stone. Failure to move the required 3 feet (0.9 m) within 5 seconds is considered an additional violation and will incur the penalties described above. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly.
+rules.append(("GS1",
+              """ Drive Teams Touching Robots or Driver Stations after Jewel/Pictograph Randomization – Drive Teams are not allowed to touch or interact with their Robots or Driver Stations once field personnel have begun the randomization process. If this occurs, a Minor Penalty will be assessed per Robot and the affected Robots are not eligible to Score a Jewel/Cryptobox Key in the Autonomous Period. This Penalty only affects the offending Team. The non-offending Alliance Partner Robot remains eligible for the Jewel/Cryptobox Key Scoring achievement."""))
+rules.append(("GS2",
+              """ Autonomous Period Robot Keep Out Area – Robots may not go Inside the opposing Alliance’s Area of the Playing Field at any time during the Autonomous Period. A Major Penalty will be assessed for violating this rule and any Scoring that occurs in the opposing Alliance’s Area by the offending Robot will not benefit the offending Alliance. The red and blue gaffer tape on the Playing Field Floor divides the Playing Field into equal sized Alliance Areas. Robots may enter the Glyph Pit at any time. The intent of this rule is to allow Robots to Score their Jewels and Glyphs without defensive play by the opposing Alliance. Inadvertent and Inconsequential incursions will be treated per <G28>"""))
+rules.append(("GS3",
+              """" Control/Possession Limits of Glyphs – Once a Match begins, a Robot may Control or Possess a maximum of two (2) Glyphs. Plowing through any quantity of Glyphs is allowed but herding or directing multiple Glyphs to gain a strategic advantage (i.e., Scoring, accessibility, defense) is not allowed. The Penalty for Controlling or Possessing more than two (2) Glyphs is an immediate Minor Penalty for each Glyph above the limit plus an additional Minor Penalty per Glyph for each 5-second interval that this situation continues. A double Major Penalty will be assessed for each Glyph Scored while a Robot Controls or Possesses more than two (2) Glyphs. Continued violation of this rule will escalate to Yellow Cards quickly."""))
+rules.append(("GS4",
+              """ Glyph Hoarding – Once an alliance has successfully scored more than 20 Glyphs, the members of the Alliance may not collectively possess/control/block access to more than the number of Glyphs required for the Alliance to completely fill their Cryptoboxes. Violation of this rule will result in an immediate Major Penalty and an additional Minor Penalty assessed for each 5 seconds the rule violation persists per Glyph in excess of the limit. Intentional or repeated violations of this rule will escalate quickly to issuance of Yellow Cards to all members of the Alliance."""))
+rules.append(("GS5",
+              """ Control/Possession Limits of Relics – Once a Match begins, a Robot may Control or Possess a maximum of one Relic at a time. The Penalty for Controlling or Possessing more than one Relic is that no Relics will be eligible to be Scored at the end of the Match by either Robot for the Alliance."""))
+rules.append(("GS6",
+              """ De-scoring Glyphs – Robots may not remove or re-position Glyphs from their opposing Alliance’s Cryptoboxes. A Double Major Penalty will be assessed for every Glyph illegally removed or re-positioned. Robots are allowed to remove or re-position Glyphs from their own Alliance’s Cryptoboxes. Drive Teams should exercise care when operating around an opposing Alliance’s Cryptobox to mitigate De-scoring."""))
+rules.append(("GS7",
+              """ De-scoring Relics – Robots may not remove or re-position Relics In the opposing Alliance’s Recovery Zone. In the event of any re-positioning (for example, if a Blue Relic is dropped into the Blue Recovery Zone, bounces to the Red Recovery Zone and knocks the Red Relic from one Scoring position to another) the opposing Alliance’s Relic is awarded the maximum potential points (40 + 15 = 55). De-scoring an opposing Alliance’s Relic will be penalized, even if it is accidental. This rule supersedes rule <G28>"""))
+rules.append(("GS8",
+              """" Interfering with Access to Cryptobox – Robots may not interfere with an opposing Alliance Robot that is In their Alliance’s Safe Zone and attempting to Score a Glyph. A Robot must have a Glyph in its Control to be considered as attempting to Score. The first instance will result in an immediate Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly."""))
+rules.append(("GS9",
+              """ Non-Glyph Game Elements Inside Cryptobox – Glyphs are the only item allowed to be placed In a Cryptobox. A Major Penalty will immediately be assessed for each non-Glyph item (Jewel, Relic, etc.) placed In an opposing Alliance’s Cryptobox. Removal of the illegal Game Element is up to the Alliance that owns the Cryptobox."""))
+rules.append(("GS10",
+              """ Controlling or Blocking access to Relics - Robots may not Control, Trap, or Block access to an opposing Alliance’s Relic. The first instance will result in an immediate Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. If the referee declares a Controlling, Trapping, or Blocking access Penalty, the offending Robot must move away at least 3 ft. (0.9 m), approximately 1.5 floor tiles from the opponent’s Relic. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly. The intent of this rule is to allow Robot access to their Relics. Blocking means denying ALL access, so general Robot movement with respect to other Robots should not be considered in violation unless there is no other way to traverse the Playing Field to get the Relic. Also, note that this rule requires attempted action on the part of the opposing Alliance."""))
+rules.append(("GS11", """ Blocking access to Balancing Stone– During the End Game, Robots may not Block access to the opposing Alliance’s Balancing Stones. The first instance will result in a warning with any following violations resulting in a Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. If the referee declares a Blocking access warning during the End Game, the offending Robot must move away at least 3 feet (0.9 m), approximately 1.5 floor tiles from the Blocked Balancing Stone. Failure to move the required 3 feet (0.9 m) within 5 seconds is considered an additional violation and will incur the penalties described above. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly.
 The intent of this rule is to allow Robot access to and from their Alliance’s Balancing Stones. Blocking and Trapping means denying ALL access, so general Robot movement with respect to other Robots should not be considered in violation unless there is no other way to traverse the Playing Field to get to the Balancing Stone. Also note that this rule requires attempted access to a Balancing Stone on the part of the opposing Alliance."""))
-
-rules.append(("GS12",""" Balancing Stone Interference – Robots may not interfere with the opposing Alliance’s Robot or Balancing Stone while that Robot is attempting to Balance during the End Game. Once a Robot is in contact with the Balancing Stone this rule will apply. The first instance will result in a warning with any following violations resulting in a Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. The intent of this rule is to allow Robots to Balance on the Balancing Stones without interference. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly."""))
-
-rules.append(("GS13",""" Preventing Relic Scoring – Robots may not interfere with opposing Alliance Robots that are attempting to Score a Relic. A Robot must have a Relic in its Possession and be within 24 inches (61 cm), approximately one tile, of the wall facing that Alliance’s Recovery Zones to be considered as attempting to Score. Incidental contact that is Inadvertent and Inconsequential will not be Penalized. The first instance will result in a Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists."""))
-
-rules.append(("GS14",""" Relic Control - Robots may Control or Possess their own Alliance’s Relics at any time but may only
+rules.append(("GS12",
+              """ Balancing Stone Interference – Robots may not interfere with the opposing Alliance’s Robot or Balancing Stone while that Robot is attempting to Balance during the End Game. Once a Robot is in contact with the Balancing Stone this rule will apply. The first instance will result in a warning with any following violations resulting in a Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists. The intent of this rule is to allow Robots to Balance on the Balancing Stones without interference. Additional occurrences of violations of this rule will escalate to Yellow Cards quickly."""))
+rules.append(("GS13",
+              """ Preventing Relic Scoring – Robots may not interfere with opposing Alliance Robots that are attempting to Score a Relic. A Robot must have a Relic in its Possession and be within 24 inches (61 cm), approximately one tile, of the wall facing that Alliance’s Recovery Zones to be considered as attempting to Score. Incidental contact that is Inadvertent and Inconsequential will not be Penalized. The first instance will result in a Major Penalty and an additional Minor Penalty assessed for every five seconds that the rule violation persists."""))
+rules.append(("GS14", """ Relic Control - Robots may Control or Possess their own Alliance’s Relics at any time but may only
 Score their Relic (i.e. reach over the Playing Field Wall) during the End Game or when the Relic is eligible to
 be Scored (whichever is earlier). If a Cryptobox Cipher is correctly solved prior to the start of End Game,
 Teams are permitted to Score their Relic early. One (1) Relic may be Scored early for each completed Cipher.
 Referees will signal the Alliance when they are allowed to Score a Relic early. Relics that are moved Outside
 the Playing Field Wall (by their Alliance) before they are eligible will have zero Score value."""))
+rules.append(("GS15",
+              """ Outside Contact during Relic Scoring – Robots may reach over the audience-facing Playing Field Perimeter Wall (and touch the floor outside the Playing Field) only while attempting to Score or attempting to re-position a Relic. Robots may contact the top and outside surface of the Playing Field Perimeter Wall as well as the Recovery Zone mats while attempting to Score a Relic. Robots extending Outside the Playing Field and Relics removed from the Playing Field in an attempt to Score are not subject to rule <S2> or <G19>. For example, a Robot reaching over the wall while attempting to score a Relic in the Recovery Zone is allowed. Note that rule <S1> still applies, so Robots will need to ensure safe behavior when extended Outside the Playing Field Wall."""))
+rules.append(("GS16",
+              """ Scoring Relics - The only legal way to Score a Relic is by placing/dropping it in the Relic Recovery Zone. Relics may not be propelled with any noticeable force (i.e. shooting, launching, flicking, etc.). Illegally launched Relics have zero Score value. Relics that miss the Recovery Zones are not replaced into the Playing Field. They remain where they land and are available for Robots to attempt recovery."""))
 
-rules.append(("GS15",""" Outside Contact during Relic Scoring – Robots may reach over the audience-facing Playing Field Perimeter Wall (and touch the floor outside the Playing Field) only while attempting to Score or attempting to re-position a Relic. Robots may contact the top and outside surface of the Playing Field Perimeter Wall as well as the Recovery Zone mats while attempting to Score a Relic. Robots extending Outside the Playing Field and Relics removed from the Playing Field in an attempt to Score are not subject to rule rules.append(("S2",""" or rules.append(("G19","""". For example, a Robot reaching over the wall while attempting to score a Relic in the Recovery Zone is allowed. Note that rule <S1> still applies, so Robots will need to ensure safe behavior when extended Outside the Playing Field Wall."""))
+commandStr = "*"
 
-rules.append(("GS16",""" Scoring Relics - The only legal way to Score a Relic is by placing/dropping it in the Relic Recovery Zone. Relics may not be propelled with any noticeable force (i.e. shooting, launching, flicking, etc.). Illegally launched Relics have zero Score value. Relics that miss the Recovery Zones are not replaced into the Playing Field. They remain where they land and are available for Robots to attempt recovery."""))
-
-commandStr = "~"
 
 def handle_query(query, rules_list, awards_list):
     words = query.lower().split(" ")
@@ -1037,11 +1038,12 @@ def handle_query(query, rules_list, awards_list):
         reply_text += term[0] + ":\n" + term[1] + "\n"
     return reply_text
 
+
 def get_rules_list(rules_list, query_list):
     good_rules = []
     if (len(query_list) == 1):
         for rule in rules_list:
-            if(query_list[0].lower() == rule[0].lower()):
+            if (query_list[0].lower() == rule[0].lower()):
                 return [rule]
     for rule in rules_list:
         is_good = 0
@@ -1058,11 +1060,14 @@ def get_rules_list(rules_list, query_list):
             good_rules.append(rule)
     return good_rules
 
+
 def test_on_message(message):
     global commandStr
     if message[0:len(commandStr)] == commandStr:
         print("IN")
         test_handle_message(message[len(commandStr):])
+
+
 def test_handle_message(messageBody):
     global commandStr
     print(messageBody)
@@ -1089,6 +1094,69 @@ def getHelpText(sender):
 print("Setting up Client")
 client = discord.Client()
 
+
+def is_user(string):
+    return len(string) >= 6 and string[-4:0].is_numeric() and string[-5] == "#"
+
+
+cah_players_array = []
+cah_player_cards_array = []
+cah_scores_array = []
+cah_list_of_all_white_cards = []
+cah_game_admin = ""
+cah_admin_candidate = ""
+for i in range(100):
+    cah_list_of_all_white_cards.append("Card Number " + str(i))
+cah_deck_of_cards = cah_list_of_all_white_cards
+
+
+def is_card_in_use(card_candidate):
+    global cah_player_cards_array
+    for cards in cah_player_cards_array:
+        for card in cards:
+            if card_candidate == card:
+                return False
+    return True
+
+
+def get_user_position(username):
+    global cah_players_array
+    return cah_players_array.index(username)
+
+
+def shuffle_deck():
+    global cah_deck_of_cards
+    cah_deck_of_cards = []
+    for card_candidate in cah_list_of_all_white_cards:
+        if not is_card_in_use(card_candidate):
+            cah_deck_of_cards.append(card_candidate)
+    random.shuffle(cah_deck_of_cards)
+
+
+def draw_a_card():
+    global cah_deck_of_cards
+    random.shuffle(cah_deck_of_cards)
+
+    return cah_deck_of_cards.pop(0)
+
+
+def get_new_cards(number):
+    global cah_deck_of_cards
+    new_cards = []
+    while len(new_cards) < number:
+        if len(cah_deck_of_cards) == 0:
+            return get_new_cards(number)
+        new_cards.append(draw_a_card())
+    return new_cards
+
+
+def add_users(string):
+    global cah_players_array
+    global cah_player_cards_array
+    for name in string.split(" "):
+        add_player_and_send_dm(name)
+
+
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -1097,33 +1165,109 @@ async def on_ready():
     print('------')
 
 
+async def add_player_and_send_dm(player_name):
+    global cah_players_array
+    cah_players_array.append(player_name)
+    cah_player_cards_array.append(get_new_cards(5))
+    dm_message = "Welcome! Your cards are:\n"
+    count = 0
+    for card in cah_player_cards_array[get_user_position(player_name)]:
+        count += 1
+        dm_message += str(count) + "| " + card + "\n"
+    await client.send_message(player_name, dm_message)
+    time.sleep(.1)
+
+
 @client.event
 async def on_message(message):
+    global cah_admin_candidate
     global commandStr
+    global cah_game_admin
+    global cah_players_array
+    global cah_player_cards_array
+    queries = ["award", "rule", "define"]
+    cah_requests = ["startgame", "newcard", "adduser", "endvoting", "kickplayer", "endsubmissions", "cahhelp", "playcard", "newgameadmin"]
     if message.content[0:len(commandStr)] == commandStr:
-        messageCommand = message.content[len(commandStr):]
+        message_command = message.content[len(commandStr):].lower()
+        message_command_word = message_command.split(" ")[0]
+        message_command_no_word = message_command[len(message_command_word):]
         print("Parsing: " + message.content)
-        if(messageCommand == "about" or messageCommand == "help"):
+        reply = ""
+        if (message_command == "about" or message_command == "help"):
             reply = getHelpText(str(message.author)[-5:])
-        else:
+        elif message_command_word in queries:
             print("handling query")
-            reply = handle_query(messageCommand, rules, awards)
+            reply = handle_query(message_command, rules, awards)
+        elif message_command_word in cah_requests:
+            print("handling cah")
+            if (message_command_word == "startgame"):
+                cah_game_admin = str(message.author)
+                add_users(message_command_no_word)
+                for user in cah_players_array:
+                    add_player_and_send_dm(user)
+                reply = "Players in the game, check your direct messages for your card!\n\n Game admin, you can play each new Black card with the " + commandStr + "newcard command.\nYou can get information about running the game with the " + commandStr + "cahhelp command"
+            elif (message_command_word == "adduser"):
+                if (is_user(message_command_no_word)):
+                    try:
+                        await add_player_and_send_dm(message_command_word)
+                    except:
+                        await client.send_message(message.channel, "Failed to send a DM to " + message_command_no_word)
+            elif (message_command_word == "endvoting"):
+                return
+            elif (message_command_word == "endsubmissions"):
+                return
+            elif (message_command_word == "cahhelp"):
+                reply = """Commands:
+                        "startgame LIST OF PLAYERS": starts a new game, with the command user as the owner and each tagged player as a player (owner must include themselves as a player)
+                        "newcard": plays a new black card, opens submissions for play
+                        "adduser PLAYER": adds the tagged player to the game, deals them cards
+                        "endsubmissions": ends player card submissions for this black card
+                        "endvoting": ends voting for a card, winner is chosen
+                        "playcard CARDNUMBER": plays the card with the number you have in the cards dm
+                        "kickplayer PLAYER:" removes this player from the game
+                        "newgameadmin PLAYER": makes the tagged player the new game admin
+                        "confirmgameadmin": confirms that the speaking player exists, and can thus admin (anti-typo tech)
+                        "cahhelp": This help information
+                        """
+            elif (message_command_word == "playcard"):
+                return
+            elif (message_command_word == "newgameadmin"):
+                if(is_user(message_command_no_word)):
+                    cah_admin_candidate = message_command_no_word
+                    reply = "Okay, @"+cah_admin_candidate + " is the candidate for admin. If they type "+commandStr+"confrimgameadmin, they will become the admin"
+                else:
+                    reply = "It looks like that isn't a user account"
+            elif (message_command_word == "confrimgameadmin"):
+                if(str(message.author)==cah_admin_candidate):
+                    cah_game_admin = str(message.author[-5:])
+                    reply = "@"+cah_game_admin+", you are the new admin of the game."
+                else:
+                    reply = "@" + str(message.author[-5:]) + ", it doesn't look like you are an admin candidate"
         print("Reply is:" + str(reply) + "")
         if reply == "":
             await client.send_message(message.channel, "Sorry, I couldn't find anything about that query")
         else:
             print(reply)
-            while(len(reply) > 2000):
+            while (len(reply) > 2000):
                 await client.send_message(message.channel, reply[0:2000])
                 reply = reply[2000:]
             await client.send_message(message.channel, reply)
 
-useBot = True
+
 if (useBot):
     print("Running Bot")
     client.run(login_token)
     # https://discordapp.com/api/oauth2/authorize?client_id=400342210345828352&permissions=3072&scope=bot
 else:
-    while True:
-        query = input("What query")
-        test_on_message(query)
+    add_users("Player1 Player2 Player3 Player4")
+    for i in cah_player_cards_array:
+        print(i)
+    print(draw_a_card())
+    while (len(cah_deck_of_cards) > 1):
+        print("Drew: " + draw_a_card())
+        print(len(cah_deck_of_cards))
+    shuffle_deck()
+
+    # while True:
+    #    query = input("What query")
+    #    test_on_message(query)
