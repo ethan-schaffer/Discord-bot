@@ -2,11 +2,21 @@
 import discord
 import random
 import time
+from enum import Enum
+
+
+class GameState(Enum):
+    NO_GAME = 1
+    NO_BLACK_CARD = 2
+    SUBMITTING_CARDS = 3
+    VOTING = 4
+
 
 with open('token.txt') as token_file:
     for line in token_file:
         login_token = line
-useBot = False
+
+useBot = True
 
 rules = []
 awards = []
@@ -1081,7 +1091,7 @@ def test_handle_message(messageBody):
 
 
 def getHelpText(sender):
-    reply = "@" + str(sender) + " this bot is pretty simple:"
+    reply = sender + " this bot is pretty simple:"
     reply += "\n"
     reply += commandStr + "rule QUERY_HERE -- will search the rules, returning rules containing 75% or more of the words in QUERY"
     reply += "\n"
@@ -1099,15 +1109,26 @@ def is_user(string):
     return len(string) >= 6 and string[-4:0].is_numeric() and string[-5] == "#"
 
 
+cah_expected_cards = 5
 cah_players_array = []
 cah_player_cards_array = []
 cah_scores_array = []
 cah_list_of_all_white_cards = []
+cah_list_of_all_black_cards = []
 cah_game_admin = ""
 cah_admin_candidate = ""
-for i in range(100):
-    cah_list_of_all_white_cards.append("Card Number " + str(i))
+with open('all_white_cards.txt') as white_cards_file:
+    for line in white_cards_file:
+        card_text = line.replace("\n", "")
+        cah_list_of_all_white_cards.append(card_text)
+with open('all_black_cards.txt') as black_cards_file:
+    for line in black_cards_file:
+        card_text = line.replace("\n", "")
+        cah_list_of_all_black_cards.append(card_text)
 cah_deck_of_cards = cah_list_of_all_white_cards
+cah_deck_of_black_cards = cah_list_of_all_black_cards
+cah_game_state = GameState.NO_GAME
+cah_submitted_cards = []
 
 
 def is_card_in_use(card_candidate):
@@ -1136,8 +1157,16 @@ def shuffle_deck():
 def draw_a_card():
     global cah_deck_of_cards
     random.shuffle(cah_deck_of_cards)
-
     return cah_deck_of_cards.pop(0)
+
+
+async def draw_a_black_card():
+    global cah_deck_of_black_cards
+    global cah_list_of_all_black_cards
+    if len(cah_deck_of_black_cards) == 0:
+        cah_deck_of_black_cards = cah_list_of_all_black_cards
+    random.shuffle(cah_deck_of_black_cards)
+    return cah_deck_of_black_cards.pop(0)
 
 
 def get_new_cards(number):
@@ -1150,13 +1179,6 @@ def get_new_cards(number):
     return new_cards
 
 
-def add_users(string):
-    global cah_players_array
-    global cah_player_cards_array
-    for name in string.split(" "):
-        add_player_and_send_dm(name)
-
-
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -1165,10 +1187,18 @@ async def on_ready():
     print('------')
 
 
+def add_player(player_name):
+    global cah_players_array
+    global cah_expected_cards
+    cah_players_array.append(player_name)
+    cah_player_cards_array.append(get_new_cards(cah_expected_cards))
+
+
 async def add_player_and_send_dm(player_name):
     global cah_players_array
+    global cah_expected_cards
     cah_players_array.append(player_name)
-    cah_player_cards_array.append(get_new_cards(5))
+    cah_player_cards_array.append(get_new_cards(cah_expected_cards))
     dm_message = "Welcome! Your cards are:\n"
     count = 0
     for card in cah_player_cards_array[get_user_position(player_name)]:
@@ -1178,71 +1208,122 @@ async def add_player_and_send_dm(player_name):
     time.sleep(.1)
 
 
-@client.event
-async def on_message(message):
+async def handle_cah(message):
     global cah_admin_candidate
     global commandStr
     global cah_game_admin
     global cah_players_array
     global cah_player_cards_array
+    global cah_game_state
+    global cah_submitted_cards
+    global cah_expected_cards
+    message_command = message.content[len(commandStr):].lower()
+    message_command_word = message_command.split(" ")[0]
+    message_command_no_word = message_command[len(message_command_word):]
+
+    if (message_command_word == "startgame"):
+        cah_game_state = GameState.NO_BLACK_CARD
+        cah_game_admin = str(message.author)
+        await add_player_and_send_dm(message.author)
+        return "To join the game, type \"" + commandStr + "joingame\" (no quotes)\n\n Game admin, you can play each new Black card with the " + commandStr + "newcard command.\nYou can get information about running the game with the " + commandStr + "cahhelp command"
+
+    if (message_command_word == "joingame"):
+        await add_player_and_send_dm(message.author)
+        return message.author.mention + ", you have joined the game! Check your DM for the cards you got"
+
+    if (message_command_word == "endvoting"):
+        cah_game_state = GameState.NO_BLACK_CARD
+        for index in range(len(cah_players_array)):
+            if len(cah_player_cards_array[index]) < cah_expected_cards:
+                cah_player_cards_array[index].append(draw_a_card())
+                dm_message = "You drew a new card, your cards are now:\n"
+                count = 0
+                for card in cah_player_cards_array[get_user_position(cah_players_array[index])]:
+                    count += 1
+                    dm_message += str(count) + "| " + card + "\n"
+                await client.send_message(cah_players_array[index], dm_message)
+                time.sleep(.1)
+
+    if message_command_word == "submitted":
+        print("--")
+        for card in cah_submitted_cards:
+            print(str(card[0]) + "  " + str(card[1]) + "  " + str(card[2]))
+            await client.send_message(message.author, str(card[0]) + "  " + str(card[1]) + "  " + str(card[2]))
+        print("--")
+
+    if message_command_word == "playcard":
+        if message.author in cah_players_array:
+            counter = 0
+            card_number = int(message_command_no_word) - 1
+            card_name = cah_player_cards_array[get_user_position(message.author)][card_number]
+            await client.send_message(message.author, "\n\nGot it, I have you playing the card \"" + card_name + "\"")
+            for player_card_pair in cah_submitted_cards:
+                if message.author == player_card_pair[0]:
+                    cah_submitted_cards[counter] = [message.author, card_number, card_name]
+                counter += 1
+        else:
+            return message.author.mention + " please join the game to play"
+
+    if (message_command_word == "endsubmissions"):
+        cah_game_state = GameState.VOTING
+
+    if (message_command_word == "cahhelp"):
+        return """Commands:
+                    "startgame LIST OF PLAYERS": starts a new game, with the command user as the owner and each tagged player as a player (owner must include themselves as a player)
+                    "newblackcard": plays a new black card, opens submissions for play
+                    "joingame": adds you to the game and deals you cards
+                    "endsubmissions": ends player card submissions for this black card
+                    "endvoting": ends voting for a card, winner is chosen
+                    "playcard CARDNUMBER": plays the card with the number you have in the cards dm
+                    "kickplayer PLAYER:" removes this player from the game
+                    "newgameadmin PLAYER": makes the tagged player the new game admin
+                    "confirmgameadmin": confirms that the speaking player exists, and can thus admin (anti-typo tech)
+                    "cahhelp": This help information
+                    """
+
+    if message_command_word == "newblackcard":
+        cah_game_state = GameState.SUBMITTING_CARDS
+        cah_submitted_cards = []
+        for user in cah_players_array:
+            cah_submitted_cards.append([user, "", ""])
+        return "Okay, the new card is: \n" + await draw_a_black_card()
+
+    if message_command_word == "newgameadmin":
+        if is_user(message_command_no_word):
+            cah_admin_candidate = message_command_no_word
+            return "Okay, @" + cah_admin_candidate + " is the candidate for admin. If they type " + commandStr + "confrimgameadmin, they will become the admin"
+        else:
+            return "It looks like that isn't a user account"
+
+    if message_command_word == "confirmgameadmin":
+        if str(message.author) == cah_admin_candidate:
+            cah_game_admin = str(message.author[-5:])
+            return "@" + cah_game_admin + ", you are the new admin of the game."
+        else:
+            return "@" + str(message.author[-5:]) + ", it doesn't look like you are an admin candidate"
+
+
+@client.event
+async def on_message(message):
     queries = ["award", "rule", "define"]
-    cah_requests = ["startgame", "newcard", "adduser", "endvoting", "kickplayer", "endsubmissions", "cahhelp", "playcard", "newgameadmin"]
+    cah_requests = ["startgame", "joingame", "submitted", "newblackcard", "endvoting", "kickplayer", "endsubmissions",
+                    "cahhelp",
+                    "playcard", "newgameadmin"]
     if message.content[0:len(commandStr)] == commandStr:
         message_command = message.content[len(commandStr):].lower()
         message_command_word = message_command.split(" ")[0]
-        message_command_no_word = message_command[len(message_command_word):]
         print("Parsing: " + message.content)
         reply = ""
         if (message_command == "about" or message_command == "help"):
-            reply = getHelpText(str(message.author)[-5:])
+            reply = getHelpText(message.author.mention)
         elif message_command_word in queries:
             print("handling query")
             reply = handle_query(message_command, rules, awards)
         elif message_command_word in cah_requests:
             print("handling cah")
-            if (message_command_word == "startgame"):
-                cah_game_admin = str(message.author)
-                add_users(message_command_no_word)
-                for user in cah_players_array:
-                    add_player_and_send_dm(user)
-                reply = "Players in the game, check your direct messages for your card!\n\n Game admin, you can play each new Black card with the " + commandStr + "newcard command.\nYou can get information about running the game with the " + commandStr + "cahhelp command"
-            elif (message_command_word == "adduser"):
-                if (is_user(message_command_no_word)):
-                    try:
-                        await add_player_and_send_dm(message_command_word)
-                    except:
-                        await client.send_message(message.channel, "Failed to send a DM to " + message_command_no_word)
-            elif (message_command_word == "endvoting"):
+            reply = await handle_cah(message)
+            if reply == None:
                 return
-            elif (message_command_word == "endsubmissions"):
-                return
-            elif (message_command_word == "cahhelp"):
-                reply = """Commands:
-                        "startgame LIST OF PLAYERS": starts a new game, with the command user as the owner and each tagged player as a player (owner must include themselves as a player)
-                        "newcard": plays a new black card, opens submissions for play
-                        "adduser PLAYER": adds the tagged player to the game, deals them cards
-                        "endsubmissions": ends player card submissions for this black card
-                        "endvoting": ends voting for a card, winner is chosen
-                        "playcard CARDNUMBER": plays the card with the number you have in the cards dm
-                        "kickplayer PLAYER:" removes this player from the game
-                        "newgameadmin PLAYER": makes the tagged player the new game admin
-                        "confirmgameadmin": confirms that the speaking player exists, and can thus admin (anti-typo tech)
-                        "cahhelp": This help information
-                        """
-            elif (message_command_word == "playcard"):
-                return
-            elif (message_command_word == "newgameadmin"):
-                if(is_user(message_command_no_word)):
-                    cah_admin_candidate = message_command_no_word
-                    reply = "Okay, @"+cah_admin_candidate + " is the candidate for admin. If they type "+commandStr+"confrimgameadmin, they will become the admin"
-                else:
-                    reply = "It looks like that isn't a user account"
-            elif (message_command_word == "confrimgameadmin"):
-                if(str(message.author)==cah_admin_candidate):
-                    cah_game_admin = str(message.author[-5:])
-                    reply = "@"+cah_game_admin+", you are the new admin of the game."
-                else:
-                    reply = "@" + str(message.author[-5:]) + ", it doesn't look like you are an admin candidate"
         print("Reply is:" + str(reply) + "")
         if reply == "":
             await client.send_message(message.channel, "Sorry, I couldn't find anything about that query")
@@ -1259,7 +1340,11 @@ if (useBot):
     client.run(login_token)
     # https://discordapp.com/api/oauth2/authorize?client_id=400342210345828352&permissions=3072&scope=bot
 else:
-    add_users("Player1 Player2 Player3 Player4")
+    add_player("player 1")
+    add_player("player 2")
+    add_player("player 3")
+    add_player("player 4")
+    add_player("player 5")
     for i in cah_player_cards_array:
         print(i)
     print(draw_a_card())
