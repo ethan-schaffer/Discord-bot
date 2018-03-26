@@ -1121,12 +1121,12 @@ cah_gameplay_channel = None
 with open('all_white_cards.txt') as white_cards_file:
     for line in white_cards_file:
         card_text = line.replace("\n", "")
-        if not '\t' in card_text:
+        if not "    " in card_text:
             cah_list_of_all_white_cards.append(card_text)
 with open('all_black_cards.txt') as black_cards_file:
     for line in black_cards_file:
         card_text = line.replace("\n", "")
-        if not '\t' in card_text:
+        if not "    " in card_text:
             cah_list_of_all_black_cards.append(card_text)
 cah_deck_of_cards = cah_list_of_all_white_cards
 cah_deck_of_black_cards = cah_list_of_all_black_cards
@@ -1235,6 +1235,7 @@ async def choose_winner(winning_number):
         print("want to draw")
         await draw_till_full()
 
+
 async def draw_till_full():
     for index in range(len(cah_players_array)):
         if len(cah_player_cards_array[index]) < cah_expected_cards:
@@ -1246,6 +1247,7 @@ async def draw_till_full():
                 dm_message += str(count) + "| " + card + "\n"
             await client.send_message(cah_players_array[index], dm_message)
             time.sleep(.01)
+
 
 async def end_submissions():
     global commandStr
@@ -1299,7 +1301,7 @@ async def handle_cah(message):
         return message.author.mention + ", you have joined the game! Check your DM for the cards you got"
 
     if message_command_word == "choosewinner" or message_command_word == "cw":
-        if(message.author.mention == cah_game_admin):
+        if (message.author.mention == cah_game_admin):
             await choose_winner(message_command_no_word)
 
     if message_command_word == "submitted":
@@ -1370,23 +1372,32 @@ async def handle_cah(message):
     if message_command_word == "whoisadmin":
         return cah_game_admin + " is the admin of this game."
 
+
 @client.event
 async def on_message(message):
     if (message.author == client.user):
         return
-    bad_language = ["fuck", "bitch", ":eggplant:"]
+    bad_language = ["fuck", "bitch", ":eggplant:", "gay", "autistic", "autism"]
     for bad_word in bad_language:
         if (bad_word in message.content):
             await client.send_message(message.channel, message.author.mention + ",  watch your language, please")
             return
-    if(message.content == commandStr+"gdoc"):
+    mispelled_words = ["cypher", "mechanum"]
+    correct_words = ["cipher", "mecanum"]
+
+    for word_index in range(len(mispelled_words)):
+        if mispelled_words[word_index] in message.content.lower():
+            await client.send_message(message.channel, message.author.mention + ", you spelled \"" +mispelled_words[word_index] + "\" wrong. It's actually spelled " + correct_words[word_index])
+            return
+
+    if message.content.lower() == commandStr + "gdoc":
         await client.send_message(message.channel, "Check out https://docs.google.com/spreadsheets/d/1YWzPADmOL9lC4Z2Bh2W4ERZxw5BH1bV57m8DaZB2vvU/edit#gid=1790837487 to see what cards exist, and learn how to submit your own")
         return
     queries = ["award", "rule", "define"]
     cah_requests = ["startgame", "joingame", "jg", "submitted",
                     "newblackcard", "nbc", "endsubmissions", "es",
                     "cahhelp", "choosewinner", "cw", "pc", "playcard"
-                    "newgameadmin", "whoisadmin", "confirmgameadmin",
+                                                           "newgameadmin", "whoisadmin", "confirmgameadmin",
                     "endgame"]
     if message.content[0:len(commandStr)] == commandStr:
         message_command = message.content[len(commandStr):].lower()
@@ -1418,20 +1429,3 @@ if (useBot):
     print("Running Bot")
     client.run(login_token)
     # https://discordapp.com/api/oauth2/authorize?client_id=400342210345828352&permissions=3072&scope=bot
-else:
-    add_player("player 1")
-    add_player("player 2")
-    add_player("player 3")
-    add_player("player 4")
-    add_player("player 5")
-    for i in cah_player_cards_array:
-        print(i)
-    print(draw_a_card())
-    while (len(cah_deck_of_cards) > 1):
-        print("Drew: " + draw_a_card())
-        print(len(cah_deck_of_cards))
-    shuffle_deck()
-
-    # while True:
-    #    query = input("What query")
-    #    test_on_message(query)
